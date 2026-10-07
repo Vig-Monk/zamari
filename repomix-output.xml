@@ -1,0 +1,2030 @@
+This file is a merged representation of a subset of the codebase, containing files not matching ignore patterns, combined into a single document by Repomix.
+
+<file_summary>
+This section contains a summary of this file.
+
+<purpose>
+This file contains a packed representation of a subset of the repository's contents that is considered the most important context.
+It is designed to be easily consumable by AI systems for analysis, code review,
+or other automated processes.
+</purpose>
+
+<file_format>
+The content is organized as follows:
+1. This summary section
+2. Repository information
+3. Directory structure
+4. Repository files (if enabled)
+5. Multiple file entries, each consisting of:
+  - File path as an attribute
+  - Full contents of the file
+</file_format>
+
+<usage_guidelines>
+- This file should be treated as read-only. Any changes should be made to the
+  original repository files, not this packed version.
+- When processing this file, use the file path to distinguish
+  between different files in the repository.
+- Be aware that this file may contain sensitive information. Handle it with
+  the same level of security as you would the original repository.
+</usage_guidelines>
+
+<notes>
+- Some files may have been excluded based on .gitignore rules and Repomix's configuration
+- Binary files are not included in this packed representation. Please refer to the Repository Structure section for a complete list of file paths, including binary files
+- Files matching these patterns are excluded: node_modules
+- Files matching patterns in .gitignore are excluded
+- Files matching default ignore patterns are excluded
+- Files are sorted by Git change count (files with more changes are at the bottom)
+</notes>
+
+</file_summary>
+
+<directory_structure>
+app/
+  app.vue
+assets/
+  css/
+    main.css
+components/
+  AssuranceGrid.vue
+  CollectionSection.vue
+  FinishCustomizer.vue
+  HeroSection.vue
+  IntroSection.vue
+  ProductCatalog.vue
+  QuoteForm.vue
+  ReviewsSection.vue
+  SiteFooter.vue
+  StickyBottomBar.vue
+  StoneSection.vue
+  TopBar.vue
+composables/
+  useStore.ts
+public/
+  favicon.ico
+  robots.txt
+.gitignore
+nuxt.config.ts
+package.json
+README.md
+tsconfig.json
+</directory_structure>
+
+<files>
+This section contains the contents of the repository's files.
+
+<file path="app/app.vue">
+<script setup lang="ts">
+import { ref, onMounted, onUnmounted } from 'vue'
+
+const isBarActive = ref(false)
+let observer: IntersectionObserver | null = null
+
+onMounted(() => {
+  const heroEl = document.getElementById('top')
+  if (heroEl && 'IntersectionObserver' in window) {
+    observer = new IntersectionObserver(([entry]) => {
+      isBarActive.value = !entry.isIntersecting
+    })
+    observer.observe(heroEl)
+  }
+})
+
+onUnmounted(() => {
+  if (observer) observer.disconnect()
+})
+</script>
+
+<template>
+	<div>
+		<!-- Sticky Navigation Bar (Reveals on scroll past hero) -->
+		<TopBar :active="isBarActive" />
+
+		<!-- Hero Section -->
+		<HeroSection />
+
+		<main>
+			<!-- Brand & Shop Intro -->
+			<IntroSection />
+
+			<!-- Collection List with Sticky Hover Preview -->
+			<CollectionSection />
+
+			<!-- Faucet Three Finishes SVG Customizer -->
+			<FinishCustomizer />
+
+			<!-- Stone Surfaces with Interactive Specs & Room Preview -->
+			<StoneSection />
+
+			<!-- Tabbed Product Catalog List -->
+			<ProductCatalog />
+
+			<!-- Customer & Contractor Reviews -->
+			<ReviewsSection />
+
+			<!-- Service Assurances Grid -->
+			<AssuranceGrid />
+
+			<!-- WhatsApp Direct Quote Form -->
+			<QuoteForm />
+		</main>
+
+		<!-- Site Footer -->
+		<SiteFooter />
+
+		<!-- Mobile Bottom CTA Bar -->
+		<StickyBottomBar />
+	</div>
+</template>
+</file>
+
+<file path="assets/css/main.css">
+/* ========================================================
+   DESIGN TOKENS & PROCEDURAL SVG TEXTURES
+   ======================================================== */
+:root {
+  --bg: #f6f3ef;
+  --ink: #0d0907;
+  --muted: #706963;
+  --stone: #ece7e1;
+  --stone-card: #eee9e3;
+  --line: #ded8d1;
+  --line-dark: #302722;
+  --accent: #d91e4e;
+  --accent-dark: #b81741;
+  --shadow: 0 18px 55px rgba(13, 9, 7, 0.1);
+  --shadow-lg: 0 28px 80px rgba(13, 9, 7, 0.16);
+  --serif: 'Cormorant Garamond', Georgia, serif;
+  --sans: 'Hanken Grotesk', system-ui, -apple-system, sans-serif;
+
+  /* Zero-download procedural vector stone textures */
+  --marble: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='700' height='700'%3E%3Cfilter id='f'%3E%3CfeTurbulence type='turbulence' baseFrequency='.006 .011' numOctaves='5' seed='7'/%3E%3CfeColorMatrix values='0 0 0 0 .5 0 0 0 0 .48 0 0 0 0 .46 -7 0 0 0 1.35'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' fill='%23f4f2ee'/%3E%3Crect width='100%25' height='100%25' filter='url(%23f)'/%3E%3C/svg%3E");
+  --granite: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cfilter id='f'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' seed='4'/%3E%3CfeColorMatrix values='0 0 0 0 .05 0 0 0 0 .05 0 0 0 0 .05 24 0 0 0 -11.6'/%3E%3C/filter%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.7' numOctaves='2' seed='11'/%3E%3CfeColorMatrix values='0 0 0 0 .86 0 0 0 0 .85 0 0 0 0 .82 26 0 0 0 -13.4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' fill='%23403f3e'/%3E%3Crect width='100%25' height='100%25' filter='url(%23f)'/%3E%3Crect width='100%25' height='100%25' filter='url(%23g)'/%3E%3C/svg%3E");
+  --quartz: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cfilter id='f'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.3' numOctaves='1' seed='2'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 30 0 0 0 -15.6'/%3E%3C/filter%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.1' numOctaves='1' seed='9'/%3E%3CfeColorMatrix values='0 0 0 0 .62 0 0 0 0 .6 0 0 0 0 .56 30 0 0 0 -15.8'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' fill='%23e7e3db'/%3E%3Crect width='100%25' height='100%25' filter='url(%23g)'/%3E%3Crect width='100%25' height='100%25' filter='url(%23f)'/%3E%3C/svg%3E");
+}
+
+/* ========================================================
+   BASE RESETS & TYPOGRAPHY
+   ======================================================== */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--sans);
+  font-size: 15.5px;
+  line-height: 1.7;
+  color: var(--ink);
+  background-color: var(--bg);
+  padding-bottom: 62px;
+  letter-spacing: -0.005em;
+  -webkit-font-smoothing: antialiased;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+::selection {
+  background: var(--accent);
+  color: #ffffff;
+}
+
+h1, h2, h3 {
+  font-family: var(--serif);
+  line-height: 1.12;
+  letter-spacing: -0.025em;
+  font-weight: 500;
+}
+
+h1, h2 {
+  font-weight: 600;
+}
+
+h2 {
+  font-size: clamp(1.6rem, 3.2vw, 2.3rem);
+}
+
+.muted {
+  color: var(--muted);
+}
+
+.wrap {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+section {
+  padding: 96px 0;
+}
+
+/* ========================================================
+   BUTTONS & ACCENT LINKS
+   ======================================================== */
+.btn {
+  display: inline-block;
+  padding: 13px 25px;
+  font: inherit;
+  font-weight: 500;
+  font-size: 0.92rem;
+  letter-spacing: 0.02em;
+  border-radius: 999px;
+  border: 1px solid var(--ink);
+  background: transparent;
+  color: var(--ink);
+  cursor: pointer;
+  transition: transform 0.2s ease, background 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 28px rgba(13, 9, 7, 0.14);
+}
+
+.btn.solid {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #ffffff;
+}
+
+.btn.solid:hover {
+  background: var(--accent-dark);
+  border-color: var(--accent-dark);
+}
+
+.ul {
+  border-bottom: 2px solid var(--accent);
+  padding-bottom: 2px;
+  transition: color 0.2s ease, border-color 0.2s ease;
+}
+
+.ul:hover {
+  color: var(--accent);
+  border-color: var(--accent);
+}
+
+/* ========================================================
+   IMAGE PLACEHOLDER CONTAINERS & PILL TABS
+   ======================================================== */
+.ph {
+  background: linear-gradient(135deg, #cfc9bf, #b9b2a6);
+  overflow: hidden;
+}
+
+.ph img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.tabs {
+  display: flex;
+  gap: 9px;
+  flex-wrap: wrap;
+  margin-top: 28px;
+}
+
+.tab {
+  padding: 10px 19px;
+  border: 1px solid var(--line);
+  background: transparent;
+  font: inherit;
+  font-size: 0.92rem;
+  border-radius: 999px;
+  cursor: pointer;
+  color: var(--ink);
+  transition: all 0.2s ease;
+}
+
+.tab:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.tab[aria-selected="true"] {
+  background: var(--accent);
+  color: #ffffff;
+  border-color: var(--accent);
+}
+
+/* ========================================================
+   RESPONSIVE & ACCESSIBILITY OVERRIDES
+   ======================================================== */
+@media (max-width: 640px) {
+  body {
+    font-size: 15px;
+  }
+  section {
+    padding: 72px 0;
+  }
+  .wrap {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+</file>
+
+<file path="components/AssuranceGrid.vue">
+<template>
+	<div class="wrap">
+		<div class="assure">
+			<div>
+				<h3>Checked</h3>
+				<p>Every piece is inspected before it ships.</p>
+			</div>
+			<div>
+				<h3>Delivered</h3>
+				<p>To your home or site. Add areas and fees here.</p>
+			</div>
+			<div>
+				<h3>Paid your way</h3>
+				<p>M-Pesa and card in the store.</p>
+			</div>
+			<div>
+				<h3>Advice</h3>
+				<p>Fitting questions answered on WhatsApp.</p>
+			</div>
+		</div>
+	</div>
+</template>
+
+<style scoped>
+	.assure {
+		display: grid;
+		grid-template-columns: repeat(2, 1fr);
+		border-top: 1px solid var(--line);
+		border-bottom: 1px solid var(--line);
+		border-radius: 3px;
+		overflow: hidden;
+		background: var(--stone-card);
+	}
+
+	@media (min-width: 900px) {
+		.assure {
+			grid-template-columns: repeat(4, 1fr);
+		}
+	}
+
+	.assure div {
+		padding: 30px 24px;
+		border-left: 1px solid var(--line);
+	}
+
+	.assure div:nth-child(odd) {
+		border-left: 0;
+	}
+
+	@media (min-width: 900px) {
+		.assure div:nth-child(odd) {
+			border-left: 1px solid var(--line);
+		}
+
+		.assure div:first-child {
+			border-left: 0;
+		}
+	}
+
+	.assure h3 {
+		font-size: 1.15rem;
+		font-weight: 600;
+		margin-bottom: 5px;
+	}
+
+	.assure h3::before {
+		content: "";
+		display: inline-block;
+		width: 6px;
+		height: 6px;
+		border-radius: 50%;
+		background: var(--accent);
+		margin: 0 9px 3px 0;
+	}
+
+	.assure p {
+		font-size: 0.88rem;
+		color: var(--muted);
+	}
+</style>
+</file>
+
+<file path="components/CollectionSection.vue">
+<script setup lang="ts">
+import { ref } from 'vue'
+
+const { getStoreUrl, track } = useStore()
+
+const items = [
+  { key: 'countertops', title: 'Countertops', desc: 'Granite, quartz and marble, cut to measure', img: 'photo-1556911220-bff31c812dba' },
+  { key: 'kitchen', title: 'Kitchen sinks and taps', desc: 'Sinks, mixers and pull-out taps', img: 'photo-1556909114-f6e7ad7d3136' },
+  { key: 'faucets', title: 'Faucets', desc: 'Basin and bath taps', img: 'photo-1584622650111-993a426fbf0a' },
+  { key: 'showers', title: 'Showers and shower sets', desc: 'Rain heads, hand showers, full sets', img: 'photo-1507652313519-d4e9174996dd' },
+  { key: 'sinks', title: 'Bathroom sinks and vanities', desc: 'Vanity units and basins', img: 'photo-1620626011761-996317b8d101' },
+  { key: 'pedestals', title: 'Pedestal basins', desc: 'Clean lines for smaller spaces', img: 'photo-1631889993959-41b4e9c6e3c5' },
+  { key: 'toilets', title: 'Toilets and seats', desc: 'Easy-fit, soft-close options', img: 'photo-1600566753086-00f18fb6b3ea' }
+]
+
+const currentImg = ref(items[0].img)
+const isFading = ref(false)
+
+function onPreview(imgId: string) {
+  if (currentImg.value === imgId) return
+  isFading.value = true
+  setTimeout(() => {
+    currentImg.value = imgId
+    isFading.value = false
+  }, 180)
+}
+</script>
+
+<template>
+	<section id="collection" style="padding-top: 0;">
+		<div class="wrap">
+			<h2>The collection</h2>
+			<div class="coll">
+				<div class="rows">
+					<a v-for="item in items" :key="item.key" class="row" :href="getStoreUrl(item.key)"
+						@mouseenter="onPreview(item.img)" @focus="onPreview(item.img)"
+						@click="track('store_click', { category: item.key })">
+						<div>
+							<h3>{{ item.title }}</h3>
+							<small>{{ item.desc }}</small>
+						</div>
+						<div class="ph th">
+							<img :src="`https://images.unsplash.com/${item.img}?auto=format&fit=crop&w=200&q=70`" alt=""
+								loading="lazy" />
+						</div>
+						<span class="go">Shop</span>
+					</a>
+				</div>
+
+				<div class="ph pv">
+					<img :class="{ fade: isFading }"
+						:src="`https://images.unsplash.com/${currentImg}?auto=format&fit=crop&w=900&q=75`"
+						alt="Preview" />
+				</div>
+			</div>
+		</div>
+	</section>
+</template>
+
+<style scoped>
+	.coll {
+		display: grid;
+		gap: 36px;
+		margin-top: 44px;
+	}
+
+	@media (min-width: 900px) {
+		.coll {
+			grid-template-columns: 1.1fr 0.9fr;
+			gap: 86px;
+		}
+	}
+
+	.row {
+		display: grid;
+		grid-template-columns: 1fr auto auto;
+		align-items: center;
+		gap: 14px;
+		padding: 24px 0;
+		border-top: 1px solid var(--line);
+		transition: border-color 0.25s ease;
+	}
+
+	.rows .row:last-child {
+		border-bottom: 1px solid var(--line);
+	}
+
+	.row:hover {
+		border-color: #c8c0b8;
+	}
+
+	.row h3 {
+		font-size: clamp(1.5rem, 3vw, 2.1rem);
+		font-weight: 500;
+		transition: transform 0.3s, color 0.3s;
+	}
+
+	.row small {
+		display: block;
+		color: var(--muted);
+		font-size: 0.88rem;
+	}
+
+	.row:hover h3,
+	.row:focus-visible h3 {
+		transform: translateX(10px);
+		color: var(--accent);
+	}
+
+	.row .th {
+		width: 60px;
+		height: 60px;
+		border-radius: 2px;
+		box-shadow: var(--shadow);
+	}
+
+	.row .go {
+		font-size: 0.8rem;
+		color: var(--accent);
+		border-bottom: 1px solid var(--accent);
+		text-transform: uppercase;
+		letter-spacing: 0.1em;
+	}
+
+	@media (min-width: 900px) {
+		.row .th {
+			display: none;
+		}
+
+		.row {
+			grid-template-columns: 1fr auto;
+		}
+	}
+
+	.pv {
+		display: none;
+		position: sticky;
+		top: 24px;
+		aspect-ratio: 4/5;
+		border-radius: 2px;
+		box-shadow: var(--shadow-lg);
+	}
+
+	@media (min-width: 900px) {
+		.pv {
+			display: block;
+		}
+	}
+
+	.pv img {
+		filter: saturate(0.86);
+		transition: opacity 0.35s ease;
+	}
+
+	.pv img.fade {
+		opacity: 0;
+	}
+
+	@media (max-width: 640px) {
+		.row {
+			grid-template-columns: 1fr auto;
+			gap: 12px;
+		}
+
+		.row .th {
+			display: none;
+		}
+
+		.row h3 {
+			font-size: 1.4rem;
+		}
+
+		.row small {
+			font-size: 0.82rem;
+		}
+	}
+</style>
+</file>
+
+<file path="components/FinishCustomizer.vue">
+<script setup lang="ts">
+import { ref } from 'vue'
+
+const { getStoreUrl, track } = useStore()
+
+const finishes = {
+  chrome: {
+    label: 'Chrome',
+    stops: ['#f4f6f8', '#aab3bb', '#5d666e'],
+    style: 'linear-gradient(135deg, #f4f6f8, #aab3bb, #5d666e)'
+  },
+  brass: {
+    label: 'Brushed brass',
+    stops: ['#f1dcae', '#b8924d', '#6e5128'],
+    style: 'linear-gradient(135deg, #f1dcae, #b8924d, #6e5128)'
+  },
+  black: {
+    label: 'Matte black',
+    stops: ['#5a5a5c', '#2a2a2c', '#0d0d0e'],
+    style: 'linear-gradient(135deg, #5a5a5c, #2a2a2c, #0d0d0e)'
+  }
+}
+
+const activeKey = ref<'chrome' | 'brass' | 'black'>('chrome')
+</script>
+
+<template>
+	<div class="fin">
+		<div class="art">
+			<svg viewBox="0 0 300 300" role="img" aria-label="Faucet shown in the selected finish">
+				<defs>
+					<linearGradient id="faucetG" gradientUnits="userSpaceOnUse" x1="90" y1="0" x2="260" y2="0">
+						<stop :stop-color="finishes[activeKey].stops[0]" offset="0" />
+						<stop :stop-color="finishes[activeKey].stops[1]" offset="0.5" />
+						<stop :stop-color="finishes[activeKey].stops[2]" offset="1" />
+					</linearGradient>
+				</defs>
+				<ellipse cx="150" cy="274" rx="56" ry="5" fill="#000" opacity="0.12" />
+				<rect x="118" y="248" width="64" height="20" rx="4" fill="url(#faucetG)" />
+				<rect x="136" y="120" width="28" height="132" rx="6" fill="url(#faucetG)" />
+				<path d="M150 132 C150 72 160 60 204 60 C236 60 246 74 246 104" fill="none" stroke="url(#faucetG)"
+					stroke-width="22" stroke-linecap="round" />
+				<rect x="234" y="104" width="24" height="22" rx="4" fill="url(#faucetG)" />
+				<path d="M150 126 L96 100" stroke="url(#faucetG)" stroke-width="12" stroke-linecap="round" />
+			</svg>
+		</div>
+
+		<div class="tx">
+			<h2>One faucet, three finishes.</h2>
+			<p class="muted">
+				Choose the metal that suits your bathroom or kitchen. Most of our faucets, mixers, showers and
+				accessories come in chrome, brushed brass and matte black.
+			</p>
+
+			<div class="sw" role="group" aria-label="Choose a finish">
+				<button v-for="(val, key) in finishes" :key="key" :aria-pressed="activeKey === key"
+					:aria-label="val.label" :style="{ background: val.style }" @click="activeKey = key as any" />
+			</div>
+
+			<p id="fn" aria-live="polite">{{ finishes[activeKey].label }}</p>
+
+			<a class="btn" :href="getStoreUrl('faucets')" @click="track('store_click', { category: 'faucets' })">
+				Shop faucets
+			</a>
+		</div>
+	</div>
+</template>
+
+<style scoped>
+	.fin {
+		display: grid;
+		background: #e9e5de;
+		border-radius: 3px;
+		overflow: hidden;
+		box-shadow: 0 12px 45px rgba(13, 9, 7, 0.07);
+	}
+
+	@media (min-width: 900px) {
+		.fin {
+			grid-template-columns: 1fr 1fr;
+		}
+	}
+
+	.fin .art {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		padding: 48px 24px;
+		min-height: 360px;
+		background: var(--marble) center/cover;
+	}
+
+	.fin svg {
+		width: min(290px, 78%);
+		height: auto;
+	}
+
+	.fin .tx {
+		padding: 56px 24px;
+		background: var(--stone-card);
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		gap: 16px;
+		align-items: flex-start;
+	}
+
+	@media (min-width: 900px) {
+		.fin .tx {
+			padding: 72px;
+		}
+	}
+
+	.sw {
+		display: flex;
+		gap: 16px;
+	}
+
+	.sw button {
+		width: 44px;
+		height: 44px;
+		border-radius: 50%;
+		border: 1px solid var(--line);
+		cursor: pointer;
+		padding: 0;
+		transition: transform 0.2s, box-shadow 0.2s;
+	}
+
+	.sw button:hover {
+		transform: scale(1.07);
+	}
+
+	.sw button[aria-pressed="true"] {
+		box-shadow: 0 0 0 3px #eee9e3, 0 0 0 5px var(--accent);
+	}
+
+	#fn {
+		font-family: var(--serif);
+		font-size: 1.4rem;
+		color: var(--accent);
+		font-weight: 600;
+	}
+</style>
+</file>
+
+<file path="components/HeroSection.vue">
+<script setup lang="ts">
+const { BRAND_NAME, getStoreUrl, track } = useStore()
+</script>
+
+<template>
+	<header class="hero" id="top">
+		<div class="ph">
+			<img fetchpriority="high"
+				src="https://images.unsplash.com/photo-1552321554-5fefe8c9ef14?auto=format&fit=crop&w=1800&q=75"
+				alt="" />
+			<img src="https://images.unsplash.com/photo-1556911220-bff31c812dba?auto=format&fit=crop&w=1800&q=75"
+				alt="" />
+		</div>
+
+		<div class="wrap hero-nav-wrap">
+			<a class="hero-logo" href="#top">{{ BRAND_NAME }}</a>
+			<nav class="hero-nav">
+				<a class="hide-mobile" href="#collection">Collection</a>
+				<a class="hide-mobile" href="#stone">Countertops</a>
+				<a class="ul" :href="getStoreUrl('general')" @click="track('store_click', { category: 'hero_nav' })">
+					Enter the store
+				</a>
+			</nav>
+		</div>
+
+		<div class="hero-content">
+			<h1>Considered fixtures and stone countertops for the bathroom and kitchen.</h1>
+			<div class="hero-actions">
+				<a class="btn" :href="getStoreUrl('general')" @click="track('store_click', { category: 'hero_cta' })">
+					Enter the store
+				</a>
+				<a class="ul" href="#quote">Request a quote</a>
+			</div>
+		</div>
+	</header>
+</template>
+
+<style scoped>
+	.hero {
+		position: relative;
+		min-height: max(650px, 94svh);
+		display: flex;
+		flex-direction: column;
+		justify-content: space-between;
+		color: #ffffff;
+		isolation: isolate;
+	}
+
+	.hero>.ph {
+		position: absolute;
+		inset: 0;
+	}
+
+	.hero::after {
+		content: "";
+		position: absolute;
+		inset: 0;
+		background: linear-gradient(180deg, rgba(13, 9, 7, 0.58) 0%, rgba(13, 9, 7, 0.08) 35%, rgba(13, 9, 7, 0.82) 100%);
+	}
+
+	.hero>* {
+		position: relative;
+		z-index: 1;
+	}
+
+	.hero .ph img {
+		filter: saturate(0.82) contrast(1.03);
+		animation: zoom 18s ease-out both;
+	}
+
+	.hero .ph img:nth-child(2) {
+		position: absolute;
+		inset: 0;
+		opacity: 0;
+		animation: crossfade 18s ease-in-out infinite;
+	}
+
+	@keyframes zoom {
+		from {
+			transform: scale(1.08);
+		}
+	}
+
+	@keyframes crossfade {
+
+		0%,
+		38% {
+			opacity: 0;
+		}
+
+		50%,
+		88% {
+			opacity: 1;
+		}
+
+		100% {
+			opacity: 0;
+		}
+	}
+
+	.hero-nav-wrap {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		padding-top: 22px;
+		width: 100%;
+	}
+
+	.hero-logo {
+		font-family: var(--serif);
+		font-size: 1.5rem;
+		font-weight: 600;
+		letter-spacing: -0.035em;
+	}
+
+	.hero-nav a {
+		margin-left: 22px;
+		font-size: 0.92rem;
+		opacity: 0.94;
+		transition: opacity 0.2s, color 0.2s;
+	}
+
+	.hero-nav a:hover {
+		opacity: 1;
+		color: var(--accent);
+	}
+
+	.hero-content {
+		padding-bottom: 72px;
+		max-width: 1180px;
+		margin: 0 auto;
+		width: 100%;
+		padding-left: 24px;
+		padding-right: 24px;
+	}
+
+	.hero-content h1 {
+		font-size: clamp(2.35rem, 5vw, 4.55rem);
+		max-width: 16ch;
+		line-height: 0.98;
+		text-wrap: balance;
+		margin-bottom: 28px;
+	}
+
+	.hero-actions .btn {
+		background: var(--accent);
+		border-color: var(--accent);
+		color: #ffffff;
+	}
+
+	.hero-actions .btn:hover {
+		background: #ffffff;
+		border-color: #ffffff;
+		color: var(--ink);
+	}
+
+	.hero-actions .ul {
+		margin-left: 24px;
+		border-color: #ffffff;
+	}
+
+	@media (max-width: 640px) {
+		.hide-mobile {
+			display: none;
+		}
+
+		.hero {
+			min-height: 720px;
+		}
+
+		.hero-content {
+			padding-left: 20px;
+			padding-right: 20px;
+			padding-bottom: 62px;
+		}
+
+		.hero-content h1 {
+			font-size: clamp(2.45rem, 12vw, 3.65rem);
+			max-width: 12ch;
+		}
+
+		.hero-actions .btn {
+			padding: 13px 21px;
+		}
+
+		.hero-actions .ul {
+			margin-left: 12px;
+		}
+	}
+</style>
+</file>
+
+<file path="components/IntroSection.vue">
+<script setup lang="ts">
+const { getStoreUrl, track } = useStore()
+</script>
+
+<template>
+	<section>
+		<div class="wrap intro">
+			<h2>Everything for the bathroom and kitchen, in one place.</h2>
+			<div>
+				<p class="muted">
+					Faucets, showers, sinks, toilets, kitchen taps and natural stone countertops, chosen for quality and
+					priced clearly. Browse the full range online, pay by M-Pesa or card, and have it delivered to your
+					door.
+				</p>
+				<p class="intro-link">
+					<a class="ul" :href="getStoreUrl('general')" @click="track('store_click', { category: 'intro' })">
+						Browse the full store
+					</a>
+				</p>
+			</div>
+		</div>
+	</section>
+</template>
+
+<style scoped>
+	.intro {
+		display: grid;
+		gap: 28px;
+	}
+
+	@media (min-width: 900px) {
+		.intro {
+			grid-template-columns: 1fr 1fr;
+			gap: 110px;
+			align-items: start;
+		}
+	}
+
+	.intro h2 {
+		font-size: clamp(2rem, 4vw, 3.25rem);
+		max-width: 12ch;
+	}
+
+	.intro p {
+		font-size: 1.04rem;
+		line-height: 1.8;
+		max-width: 46ch;
+	}
+
+	.intro-link {
+		margin-top: 18px;
+	}
+</style>
+</file>
+
+<file path="components/ProductCatalog.vue">
+<script setup lang="ts">
+import { ref, computed } from 'vue'
+
+const { getStoreUrl, track } = useStore()
+
+const categories = [
+  {
+    key: 'countertops',
+    title: 'Countertops',
+    img: 'photo-1556911220-bff31c812dba',
+    items: [
+      ['Granite countertop', 'Cut to size, polished edge'],
+      ['Quartz countertop', 'Non-porous, low maintenance'],
+      ['Marble vanity top', 'With basin cut-out']
+    ]
+  },
+  {
+    key: 'kitchen',
+    title: 'Kitchen sinks and taps',
+    img: 'photo-1556909114-f6e7ad7d3136',
+    items: [
+      ['Stainless steel kitchen sink', 'Single bowl with drainer'],
+      ['Pull-out kitchen mixer', 'Chrome or matte black'],
+      ['Granite composite sink', 'Scratch and heat resistant']
+    ]
+  },
+  {
+    key: 'faucets',
+    title: 'Faucets',
+    img: 'photo-1584622650111-993a426fbf0a',
+    items: [
+      ['Basin mixer tap', 'Chrome, ceramic cartridge'],
+      ['Wall-mounted bath filler', 'Brushed brass'],
+      ['Single-lever kitchen tap', 'Matte black']
+    ]
+  },
+  {
+    key: 'showers',
+    title: 'Showers',
+    img: 'photo-1507652313519-d4e9174996dd',
+    items: [
+      ['Rain shower set', 'Head, arm and hand shower'],
+      ['Concealed shower mixer', 'Chrome'],
+      ['Slim hand shower', 'Matte black']
+    ]
+  },
+  {
+    key: 'sinks',
+    title: 'Sinks and vanities',
+    img: 'photo-1620626011761-996317b8d101',
+    items: [
+      ['Vanity unit with basin', 'Cabinet and mirror'],
+      ['Countertop basin', 'Ceramic, round'],
+      ['Floating vanity', 'Wall-hung, two drawers']
+    ]
+  },
+  {
+    key: 'pedestals',
+    title: 'Pedestals',
+    img: 'photo-1631889993959-41b4e9c6e3c5',
+    items: [
+      ['Classic pedestal basin', 'Full pedestal'],
+      ['Compact pedestal basin', 'For small spaces'],
+      ['Semi-pedestal basin', 'Wall-hung with half column']
+    ]
+  },
+  {
+    key: 'toilets',
+    title: 'Toilets and seats',
+    img: 'photo-1600566753086-00f18fb6b3ea',
+    items: [
+      ['Soft-close toilet seat', 'Easy-fit hinges'],
+      ['Close-coupled toilet', 'Dual flush'],
+      ['Wall-hung toilet', 'Concealed cistern']
+    ]
+  }
+]
+
+const activeKey = ref('countertops')
+const current = computed(() => categories.find(c => c.key === activeKey.value)!)
+const isFading = ref(false)
+
+function onCategory(key: string) {
+  if (activeKey.value === key) return
+  isFading.value = true
+  setTimeout(() => {
+    activeKey.value = key
+    isFading.value = false
+  }, 200)
+}
+</script>
+
+<template>
+	<section style="padding-top: 0;">
+		<div class="wrap">
+			<h2>Shop the range</h2>
+			<p class="muted" style="margin-top: 8px;">Pick a category to see what's popular. Replace these with your
+				real products and prices.</p>
+
+			<div class="tabs" role="tablist" aria-label="Product category">
+				<button v-for="c in categories" :key="c.key" class="tab" role="tab" :aria-selected="activeKey === c.key"
+					@click="onCategory(c.key)">
+					{{ c.title }}
+				</button>
+			</div>
+
+			<div class="pe">
+				<div class="ph">
+					<img :class="{ fade: isFading }"
+						:src="`https://images.unsplash.com/${current.img}?auto=format&fit=crop&w=800&q=75`" alt="" />
+				</div>
+
+				<div>
+					<ul>
+						<li v-for="(p, idx) in current.items" :key="idx">
+							<a :href="getStoreUrl(activeKey)" @click="track('store_click', { category: activeKey })">
+								<h3>{{ p[0] }}</h3>
+								<small>{{ p[1] }}</small>
+								<span class="p">KES 0,000</span>
+							</a>
+						</li>
+					</ul>
+					<a class="ul more" :href="getStoreUrl(activeKey)"
+						@click="track('store_click', { category: activeKey })">
+						Shop all {{ current.title.toLowerCase() }}
+					</a>
+				</div>
+			</div>
+		</div>
+	</section>
+</template>
+
+<style scoped>
+	.pe {
+		display: grid;
+		gap: 28px;
+		margin-top: 22px;
+	}
+
+	@media (min-width: 900px) {
+		.pe {
+			grid-template-columns: 0.9fr 1.1fr;
+			gap: 56px;
+			align-items: start;
+		}
+	}
+
+	.pe .ph {
+		aspect-ratio: 4/5;
+		border-radius: 3px;
+		box-shadow: var(--shadow);
+	}
+
+	.pe .ph img {
+		transition: opacity 0.3s;
+	}
+
+	.pe .ph img.fade {
+		opacity: 0;
+	}
+
+	.pe ul {
+		list-style: none;
+	}
+
+	.pe li a {
+		display: grid;
+		grid-template-columns: 1fr auto;
+		gap: 0 16px;
+		padding: 16px 0;
+		border-top: 1px solid var(--line);
+		transition: padding-left 0.2s;
+	}
+
+	.pe li:last-child a {
+		border-bottom: 1px solid var(--line);
+	}
+
+	.pe li a:hover {
+		padding-left: 10px;
+	}
+
+	.pe li a:hover h3 {
+		color: var(--accent);
+	}
+
+	.pe li h3 {
+		font-size: 1.25rem;
+		transition: color 0.25s;
+	}
+
+	.pe li small {
+		color: var(--muted);
+	}
+
+	.pe li .p {
+		grid-row: 1/3;
+		grid-column: 2;
+		align-self: center;
+		color: var(--accent);
+		font-weight: 600;
+	}
+
+	.more {
+		display: inline-block;
+		margin-top: 20px;
+	}
+</style>
+</file>
+
+<file path="components/QuoteForm.vue">
+<script setup lang="ts">
+import { reactive } from 'vue'
+
+const { getWaUrl, track } = useStore()
+
+const form = reactive({
+  name: '',
+  phone: '',
+  need: 'Kitchen countertops',
+  details: ''
+})
+
+function onSubmit() {
+  const msg = `Quote request\nName: ${form.name}\nPhone: ${form.phone}\nNeed: ${form.need}\nDetails: ${form.details || '-'}`
+  track('whatsapp_quote_submit', { need: form.need })
+  window.open(getWaUrl(msg), '_blank', 'noopener')
+}
+</script>
+
+<template>
+	<section id="quote">
+		<div class="wrap q">
+			<div>
+				<h2>Not sure what you need?</h2>
+				<p class="muted" style="margin-top: 14px; max-width: 40ch;">
+					Tell us about your space and we'll recommend what fits. We reply on WhatsApp, usually within a few
+					hours. Designers and contractors can ask for trade pricing.
+				</p>
+			</div>
+
+			<form @submit.prevent="onSubmit">
+				<label>Your name<input v-model="form.name" required autocomplete="name" /></label>
+				<label>Phone number<input v-model="form.phone" type="tel" required autocomplete="tel" /></label>
+				<label>What do you need?
+					<select v-model="form.need">
+						<option>Kitchen countertops</option>
+						<option>Vanity tops or stone surfaces</option>
+						<option>Kitchen sinks or taps</option>
+						<option>Bathroom faucets or showers</option>
+						<option>Sinks, vanities or pedestals</option>
+						<option>Toilets or seats</option>
+						<option>A full bathroom or kitchen</option>
+						<option>Trade or bulk order</option>
+					</select>
+				</label>
+				<label>Details (optional)<textarea v-model="form.details" rows="2"
+						placeholder="Sizes, quantities, location"></textarea></label>
+				<button class="btn" type="submit">Send on WhatsApp</button>
+			</form>
+		</div>
+	</section>
+</template>
+
+<style scoped>
+	.q {
+		display: grid;
+		gap: 40px;
+		align-items: start;
+	}
+
+	@media (min-width: 900px) {
+		.q {
+			grid-template-columns: 1fr 1fr;
+			gap: 110px;
+		}
+	}
+
+	.q h2 {
+		font-size: clamp(2rem, 4vw, 3.2rem);
+		max-width: 10ch;
+	}
+
+	form {
+		display: grid;
+		gap: 22px;
+		background: var(--stone-card);
+		padding: 32px;
+		border-radius: 3px;
+		box-shadow: var(--shadow);
+	}
+
+	@media (max-width: 640px) {
+		form {
+			padding: 24px;
+		}
+	}
+
+	label {
+		font-size: 0.85rem;
+		color: var(--muted);
+		display: grid;
+		gap: 2px;
+	}
+
+	input,
+	select,
+	textarea {
+		font: inherit;
+		color: var(--ink);
+		padding: 12px 0;
+		border: 0;
+		border-bottom: 1px solid #b9b4ab;
+		border-radius: 0;
+		background: transparent;
+		width: 100%;
+	}
+
+	input:focus,
+	select:focus,
+	textarea:focus {
+		outline: 0;
+		border-color: var(--accent);
+	}
+
+	form .btn {
+		justify-self: start;
+		background: var(--accent);
+		border-color: var(--accent);
+		color: #ffffff;
+	}
+
+	form .btn:hover {
+		background: var(--accent-dark);
+		border-color: var(--accent-dark);
+	}
+</style>
+</file>
+
+<file path="components/ReviewsSection.vue">
+<template>
+	<section style="padding-top: 0;">
+		<div class="wrap pr">
+			<blockquote>
+				“Replace this with a real customer review about quality, delivery or the stone work.”
+				<cite>Customer name, area</cite>
+			</blockquote>
+			<div class="sm">
+				<p>“A shorter review from a second customer.”<cite>Name, area</cite></p>
+				<p>“A review from a contractor or designer.”<cite>Name, company</cite></p>
+			</div>
+		</div>
+	</section>
+</template>
+
+<style scoped>
+	.pr {
+		display: grid;
+		gap: 36px;
+	}
+
+	@media (min-width: 900px) {
+		.pr {
+			grid-template-columns: 1.3fr 1fr;
+			gap: 80px;
+		}
+	}
+
+	.pr blockquote {
+		font-family: var(--serif);
+		font-size: clamp(1.4rem, 2.6vw, 2rem);
+		line-height: 1.3;
+		font-weight: 500;
+	}
+
+	.pr blockquote::before {
+		content: "“";
+		display: block;
+		color: var(--accent);
+		font-size: 3rem;
+		line-height: 0.6;
+		margin-bottom: 18px;
+	}
+
+	.pr cite {
+		display: block;
+		font: 400 0.88rem var(--sans);
+		color: var(--muted);
+		margin-top: 14px;
+		font-style: normal;
+	}
+
+	.pr .sm {
+		display: grid;
+		gap: 22px;
+	}
+
+	.pr .sm p {
+		border-top: 1px solid var(--line);
+		padding-top: 14px;
+	}
+</style>
+</file>
+
+<file path="components/SiteFooter.vue">
+<script setup lang="ts">
+const { BRAND_NAME, ADMIN_URL, WA_NUMBER, getStoreUrl, getWaUrl, track } = useStore()
+</script>
+
+<template>
+	<footer>
+		<div class="fcta wrap">
+			<h2>The full range is in the store.</h2>
+			<a class="btn" :href="getStoreUrl('general')" @click="track('store_click', { category: 'footer' })">
+				Enter the store
+			</a>
+		</div>
+
+		<div class="fbar">
+			<div class="wrap fbar-inner">
+				<span>{{ BRAND_NAME }} · Shop address, City · Mon–Sat, 8am–6pm</span>
+				<span>
+					<a :href="getWaUrl('Hi, I\'d like a quote for bathroom or kitchen items.')" target="_blank"
+						rel="noopener">WhatsApp</a> &nbsp;
+					<a :href="`tel:+${WA_NUMBER}`">Call</a> &nbsp;
+					<a :href="ADMIN_URL">Staff login</a>
+				</span>
+			</div>
+		</div>
+	</footer>
+</template>
+
+<style scoped>
+	footer {
+		background: linear-gradient(rgba(13, 9, 7, 0.94), rgba(13, 9, 7, 0.94)), var(--granite);
+		color: #c8c3bb;
+	}
+
+	.fcta {
+		padding: 84px 0 56px;
+		text-align: center;
+	}
+
+	.fcta h2 {
+		font-size: clamp(2rem, 4vw, 3.2rem);
+		color: #ffffff;
+		margin-bottom: 22px;
+	}
+
+	.fcta .btn {
+		background: var(--accent);
+		border-color: var(--accent);
+		color: #ffffff;
+	}
+
+	.fcta .btn:hover {
+		background: #ffffff;
+		border-color: #ffffff;
+		color: var(--ink);
+	}
+
+	.fbar {
+		border-top: 1px solid var(--line-dark);
+		padding: 26px 0;
+		font-size: 0.88rem;
+	}
+
+	.fbar-inner {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 16px 28px;
+		justify-content: space-between;
+	}
+
+	.fbar a {
+		color: #ffffff;
+	}
+</style>
+</file>
+
+<file path="components/StickyBottomBar.vue">
+<script setup lang="ts">
+const { getStoreUrl, getWaUrl, track } = useStore()
+</script>
+
+<template>
+	<div class="sticky">
+		<a :href="getStoreUrl('general')" @click="track('store_click', { category: 'bottom_bar' })">
+			Enter the store
+		</a>
+		<a :href="getWaUrl('Hi, I\'d like a quote for bathroom or kitchen items.')" target="_blank" rel="noopener"
+			@click="track('whatsapp_click', { category: 'bottom_bar' })">
+			WhatsApp
+		</a>
+	</div>
+</template>
+
+<style scoped>
+	.sticky {
+		position: fixed;
+		inset: auto 0 0 0;
+		z-index: 20;
+		display: flex;
+		background: rgba(246, 243, 239, 0.96);
+		backdrop-filter: blur(14px);
+		-webkit-backdrop-filter: blur(14px);
+		border-top: 1px solid var(--line);
+		box-shadow: 0 -8px 25px rgba(13, 9, 7, 0.06);
+	}
+
+	.sticky a {
+		flex: 1;
+		text-align: center;
+		padding: 16px 8px;
+		font-weight: 500;
+		font-size: 0.92rem;
+	}
+
+	.sticky a:first-child {
+		background: var(--accent);
+		color: #ffffff;
+	}
+
+	.sticky a:first-child:hover {
+		background: var(--accent-dark);
+	}
+
+	@media (max-width: 640px) {
+		.sticky a {
+			padding: 15px 8px;
+		}
+	}
+</style>
+</file>
+
+<file path="components/StoneSection.vue">
+<script setup lang="ts">
+import { ref, computed } from 'vue'
+
+const { getStoreUrl, getWaUrl, track } = useStore()
+
+const stones = {
+  marble: {
+    name: 'Marble',
+    desc: 'Natural veining and a soft, luxurious look. Every slab is one of a kind.',
+    best: 'Vanity tops, kitchen islands, feature walls',
+    care: 'Wipe spills quickly and reseal now and then',
+    finishes: 'Polished, honed',
+    img: 'photo-1620626011761-996317b8d101'
+  },
+  granite: {
+    name: 'Granite',
+    desc: 'Natural, very hard and heat resistant. A dependable choice for busy bathrooms and kitchens.',
+    best: 'Kitchen countertops, vanity tops, busy areas',
+    care: 'Seal occasionally and clean with mild soap',
+    finishes: 'Polished, honed, leathered',
+    img: 'photo-1556911220-bff31c812dba'
+  },
+  quartz: {
+    name: 'Quartz',
+    desc: 'Engineered for consistency. Non-porous, so it resists stains and needs no sealing.',
+    best: 'Kitchen countertops, vanity tops, wall panels',
+    care: 'Wipe clean and keep very hot items off it',
+    finishes: 'Polished, matte',
+    img: 'photo-1556909114-f6e7ad7d3136'
+  }
+}
+
+const activeStone = ref<'marble' | 'granite' | 'quartz'>('marble')
+const current = computed(() => stones[activeStone.value])
+const isFading = ref(false)
+
+function onSelect(k: 'marble' | 'granite' | 'quartz') {
+  if (activeStone.value === k) return
+  isFading.value = true
+  setTimeout(() => {
+    activeStone.value = k
+    isFading.value = false
+  }, 200)
+}
+</script>
+
+<template>
+	<section id="stone">
+		<div class="wrap">
+			<h2>Countertops and stone surfaces</h2>
+			<p class="muted" style="margin-top: 8px; max-width: 54ch;">
+				Kitchen countertops, vanity tops, islands and wall panels in granite, quartz and marble, cut to your
+				measurements with cut-outs for your sink and taps. Choose a stone to see more.
+			</p>
+
+			<div class="tabs" role="tablist" aria-label="Stone type">
+				<button v-for="(val, key) in stones" :key="key" class="tab" role="tab"
+					:aria-selected="activeStone === key" @click="onSelect(key as any)">
+					{{ val.name }}
+				</button>
+			</div>
+
+			<div class="sf">
+				<div class="slab" :class="activeStone">
+					<div class="ph inroom">
+						<img :class="{ fade: isFading }"
+							:src="`https://images.unsplash.com/${current.img}?auto=format&fit=crop&w=500&q=70`"
+							alt="" />
+					</div>
+				</div>
+
+				<div class="tx">
+					<h3>{{ current.name }}</h3>
+					<p class="muted">{{ current.desc }}</p>
+					<div class="kv">
+						<p><b>Best for</b><span>{{ current.best }}</span></p>
+						<p><b>Care</b><span>{{ current.care }}</span></p>
+						<p><b>Finishes</b><span>{{ current.finishes }}</span></p>
+					</div>
+					<a class="btn" target="_blank" rel="noopener"
+						:href="getWaUrl(`Hi, I'd like a quote for ${activeStone} surfaces.`)"
+						@click="track('whatsapp_click', { category: `stone_${activeStone}` })">
+						Request a {{ activeStone }} quote
+					</a>
+					<a class="ul" :href="getStoreUrl('countertops')">Shop countertops</a>
+				</div>
+			</div>
+		</div>
+	</section>
+</template>
+
+<style scoped>
+	.sf {
+		display: grid;
+		margin-top: 22px;
+		border-radius: 3px;
+		overflow: hidden;
+		box-shadow: var(--shadow);
+	}
+
+	@media (min-width: 900px) {
+		.sf {
+			grid-template-columns: 1.15fr 0.85fr;
+		}
+	}
+
+	.slab {
+		min-height: 430px;
+		position: relative;
+		background: var(--marble) center/cover;
+	}
+
+	.slab.granite {
+		background-image: var(--granite);
+	}
+
+	.slab.quartz {
+		background-image: var(--quartz);
+	}
+
+	.inroom {
+		position: absolute;
+		right: 18px;
+		bottom: 18px;
+		width: 40%;
+		max-width: 210px;
+		aspect-ratio: 4/3;
+		border: 5px solid #ffffff;
+		box-shadow: 0 18px 40px rgba(13, 9, 7, 0.28);
+	}
+
+	.inroom img {
+		transition: opacity 0.2s ease;
+	}
+
+	.inroom img.fade {
+		opacity: 0;
+	}
+
+	.sf .tx {
+		padding: 36px 24px;
+		background: var(--stone-card);
+		display: flex;
+		flex-direction: column;
+		gap: 14px;
+		align-items: flex-start;
+	}
+
+	@media (min-width: 900px) {
+		.sf .tx {
+			padding: 48px;
+		}
+	}
+
+	.sf .tx h3 {
+		font-size: clamp(2rem, 4vw, 2.7rem);
+	}
+
+	.kv {
+		display: grid;
+		gap: 8px;
+		font-size: 0.93rem;
+		border-top: 1px solid #cdc8bf;
+		padding-top: 14px;
+		width: 100%;
+	}
+
+	.kv b {
+		font-weight: 500;
+		margin-right: 6px;
+	}
+
+	.kv span {
+		color: var(--muted);
+	}
+
+	.sf .btn {
+		background: var(--accent);
+		border-color: var(--accent);
+		color: #ffffff;
+	}
+
+	.sf .btn:hover {
+		background: var(--accent-dark);
+		border-color: var(--accent-dark);
+	}
+</style>
+</file>
+
+<file path="components/TopBar.vue">
+<script setup lang="ts">
+defineProps<{
+  active: boolean
+}>()
+
+const { BRAND_NAME, getStoreUrl, track } = useStore()
+</script>
+
+<template>
+	<div class="bar" :class="{ on: active }">
+		<div class="wrap bar-inner">
+			<a class="bar-logo" href="#top">{{ BRAND_NAME }}</a>
+			<a class="btn solid" :href="getStoreUrl('general')" @click="track('store_click', { category: 'top_bar' })">
+				Enter the store
+			</a>
+		</div>
+	</div>
+</template>
+
+<style scoped>
+	.bar {
+		position: fixed;
+		top: 0;
+		left: 0;
+		right: 0;
+		z-index: 30;
+		background: rgba(246, 243, 239, 0.94);
+		backdrop-filter: blur(16px);
+		-webkit-backdrop-filter: blur(16px);
+		border-bottom: 1px solid var(--line);
+		box-shadow: 0 8px 30px rgba(13, 9, 7, 0.06);
+		transform: translateY(-100%);
+		transition: transform 0.35s ease;
+	}
+
+	.bar.on {
+		transform: translateY(0);
+	}
+
+	.bar-inner {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		height: 56px;
+	}
+
+	.bar-logo {
+		font-size: 1.3rem;
+		color: var(--ink);
+		font-family: var(--serif);
+	}
+
+	.bar .btn {
+		padding: 8px 20px;
+	}
+</style>
+</file>
+
+<file path="composables/useStore.ts">
+export const useStore = () => {
+  const BRAND_NAME = 'Zamari Surfaces'
+  const STORE_URL = 'https://your-store-url.com'
+  const ADMIN_URL = 'https://your-store-url.com/admin'
+  const WA_NUMBER = '254700000000' // Kenya country code + phone without +
+
+  const paths: Record<string, string> = {
+    countertops: '/countertops',
+    kitchen: '/kitchen',
+    faucets: '/faucets',
+    showers: '/showers',
+    sinks: '/sinks',
+    pedestals: '/pedestals',
+    toilets: '/toilets'
+  }
+
+  const getStoreUrl = (category = 'general') => {
+    const path = paths[category] || ''
+    const base = `${STORE_URL}${path}`
+    const sep = base.includes('?') ? '&' : '?'
+    return `${base}${sep}utm_source=landing&utm_medium=site&utm_content=${category}`
+  }
+
+  const getWaUrl = (message: string) => {
+    return `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(message)}`
+  }
+
+  const track = (event: string, params: Record<string, any> = {}) => {
+    try {
+      if (typeof window !== 'undefined') {
+        const w = window as any
+        if (w.dataLayer) w.dataLayer.push({ event, ...params })
+        if (w.gtag) w.gtag('event', event, params)
+        if (w.fbq) w.fbq('trackCustom', event, params)
+      }
+    } catch {}
+  }
+
+  return {
+    BRAND_NAME,
+    ADMIN_URL,
+    WA_NUMBER,
+    getStoreUrl,
+    getWaUrl,
+    track
+  }
+}
+</file>
+
+<file path="public/robots.txt">
+User-Agent: *
+Disallow:
+</file>
+
+<file path=".gitignore">
+# Nuxt dev/build outputs
+.output
+.data
+.nuxt
+.nitro
+.cache
+dist
+
+# Node dependencies
+node_modules
+
+# Logs
+logs
+*.log
+
+# Misc
+.DS_Store
+.fleet
+.idea
+
+# Local env files
+.env
+.env.*
+!.env.example
+</file>
+
+<file path="nuxt.config.ts">
+// https://nuxt.com/docs/api/configuration/nuxt-config
+export default defineNuxtConfig({
+  compatibilityDate: '2025-07-15',
+  devtools: { enabled: false },
+  app: {
+    head: {
+      title: 'Zamari Surfaces | Bathroom & Kitchen Fixtures & Natural Stone',
+      meta: [
+        { charset: 'utf-8' },
+        { name: 'viewport', content: 'width=device-width, initial-scale=1' },
+        { name: 'description', content: 'Bathroom and kitchen fixtures, sinks, faucets and granite, quartz and marble countertops. Browse online or request a quote on WhatsApp.' },
+        { name: 'theme-color', content: '#23201e' },
+        { property: 'og:type', content: 'website' },
+        { property: 'og:title', content: 'Bathroom & Kitchen Fixtures and Countertops' },
+        { property: 'og:description', content: 'Browse bathroom and kitchen fixtures, sinks and stone countertops. Delivered to your door.' },
+        { property: 'og:image', content: 'https://images.unsplash.com/photo-1552321554-5fefe8c9ef14?auto=format&fit=crop&w=1200&q=75' }
+      ],
+      link: [
+        { rel: 'preconnect', href: 'https://fonts.googleapis.com' },
+        { rel: 'preconnect', href: 'https://fonts.gstatic.com', crossorigin: '' },
+        { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Hanken+Grotesk:wght@400;500&display=swap' }
+      ]
+    }
+  }
+})
+</file>
+
+<file path="package.json">
+{
+  "name": "zamari-surfaces",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "build": "nuxt build",
+    "dev": "nuxt dev",
+    "generate": "nuxt generate",
+    "preview": "nuxt preview",
+    "postinstall": "nuxt prepare"
+  },
+  "dependencies": {
+    "@nuxt/image": "^2.1.0",
+    "@nuxt/ui": "^4.11.0",
+    "nuxt": "^4.5.2",
+    "vue": "^3.5.41",
+    "vue-router": "^5.2.0"
+  }
+}
+</file>
+
+<file path="README.md">
+# Nuxt Minimal Starter
+
+Look at the [Nuxt documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
+
+## Setup
+
+Make sure to install dependencies:
+
+```bash
+# npm
+npm install
+
+# pnpm
+pnpm install
+
+# yarn
+yarn install
+
+# bun
+bun install
+```
+
+## Development Server
+
+Start the development server on `http://localhost:3000`:
+
+```bash
+# npm
+npm run dev
+
+# pnpm
+pnpm dev
+
+# yarn
+yarn dev
+
+# bun
+bun run dev
+```
+
+## Production
+
+Build the application for production:
+
+```bash
+# npm
+npm run build
+
+# pnpm
+pnpm build
+
+# yarn
+yarn build
+
+# bun
+bun run build
+```
+
+Locally preview production build:
+
+```bash
+# npm
+npm run preview
+
+# pnpm
+pnpm preview
+
+# yarn
+yarn preview
+
+# bun
+bun run preview
+```
+
+Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
+</file>
+
+<file path="tsconfig.json">
+{
+  // https://nuxt.com/docs/guide/concepts/typescript
+  "files": [],
+  "references": [
+    {
+      "path": "./.nuxt/tsconfig.app.json"
+    },
+    {
+      "path": "./.nuxt/tsconfig.server.json"
+    },
+    {
+      "path": "./.nuxt/tsconfig.shared.json"
+    },
+    {
+      "path": "./.nuxt/tsconfig.node.json"
+    }
+  ]
+}
+</file>
+
+</files>

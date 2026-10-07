@@ -1,0 +1,211 @@
+/* ========================================================
+   DESIGN TOKENS & PROCEDURAL SVG TEXTURES
+   ======================================================== */
+:root {
+  --bg: #f6f3ef;
+  --ink: #0d0907;
+  --muted: #706963;
+  --stone: #ece7e1;
+  --stone-card: #eee9e3;
+  --line: #ded8d1;
+  --line-dark: #302722;
+  --accent: #d91e4e;
+  --accent-dark: #b81741;
+  --shadow: 0 18px 55px rgba(13, 9, 7, 0.1);
+  --shadow-lg: 0 28px 80px rgba(13, 9, 7, 0.16);
+  --serif: 'Cormorant Garamond', Georgia, serif;
+  --sans: 'Hanken Grotesk', system-ui, -apple-system, sans-serif;
+
+  /* Zero-download procedural vector stone textures */
+  --marble: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='700' height='700'%3E%3Cfilter id='f'%3E%3CfeTurbulence type='turbulence' baseFrequency='.006 .011' numOctaves='5' seed='7'/%3E%3CfeColorMatrix values='0 0 0 0 .5 0 0 0 0 .48 0 0 0 0 .46 -7 0 0 0 1.35'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' fill='%23f4f2ee'/%3E%3Crect width='100%25' height='100%25' filter='url(%23f)'/%3E%3C/svg%3E");
+  --granite: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cfilter id='f'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' seed='4'/%3E%3CfeColorMatrix values='0 0 0 0 .05 0 0 0 0 .05 0 0 0 0 .05 24 0 0 0 -11.6'/%3E%3C/filter%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.7' numOctaves='2' seed='11'/%3E%3CfeColorMatrix values='0 0 0 0 .86 0 0 0 0 .85 0 0 0 0 .82 26 0 0 0 -13.4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' fill='%23403f3e'/%3E%3Crect width='100%25' height='100%25' filter='url(%23f)'/%3E%3Crect width='100%25' height='100%25' filter='url(%23g)'/%3E%3C/svg%3E");
+  --quartz: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cfilter id='f'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.3' numOctaves='1' seed='2'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 30 0 0 0 -15.6'/%3E%3C/filter%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.1' numOctaves='1' seed='9'/%3E%3CfeColorMatrix values='0 0 0 0 .62 0 0 0 0 .6 0 0 0 0 .56 30 0 0 0 -15.8'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' fill='%23e7e3db'/%3E%3Crect width='100%25' height='100%25' filter='url(%23g)'/%3E%3Crect width='100%25' height='100%25' filter='url(%23f)'/%3E%3C/svg%3E");
+}
+
+/* ========================================================
+   BASE RESETS & TYPOGRAPHY
+   ======================================================== */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--sans);
+  font-size: 15.5px;
+  line-height: 1.7;
+  color: var(--ink);
+  background-color: var(--bg);
+  padding-bottom: 62px;
+  letter-spacing: -0.005em;
+  -webkit-font-smoothing: antialiased;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+::selection {
+  background: var(--accent);
+  color: #ffffff;
+}
+
+h1, h2, h3 {
+  font-family: var(--serif);
+  line-height: 1.12;
+  letter-spacing: -0.025em;
+  font-weight: 500;
+}
+
+h1, h2 {
+  font-weight: 600;
+}
+
+h2 {
+  font-size: clamp(1.6rem, 3.2vw, 2.3rem);
+}
+
+.muted {
+  color: var(--muted);
+}
+
+.wrap {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+section {
+  padding: 96px 0;
+}
+
+/* ========================================================
+   BUTTONS & ACCENT LINKS
+   ======================================================== */
+.btn {
+  display: inline-block;
+  padding: 13px 25px;
+  font: inherit;
+  font-weight: 500;
+  font-size: 0.92rem;
+  letter-spacing: 0.02em;
+  border-radius: 999px;
+  border: 1px solid var(--ink);
+  background: transparent;
+  color: var(--ink);
+  cursor: pointer;
+  transition: transform 0.2s ease, background 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 28px rgba(13, 9, 7, 0.14);
+}
+
+.btn.solid {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #ffffff;
+}
+
+.btn.solid:hover {
+  background: var(--accent-dark);
+  border-color: var(--accent-dark);
+}
+
+.ul {
+  border-bottom: 2px solid var(--accent);
+  padding-bottom: 2px;
+  transition: color 0.2s ease, border-color 0.2s ease;
+}
+
+.ul:hover {
+  color: var(--accent);
+  border-color: var(--accent);
+}
+
+/* ========================================================
+   IMAGE PLACEHOLDER CONTAINERS & PILL TABS
+   ======================================================== */
+.ph {
+  background: linear-gradient(135deg, #cfc9bf, #b9b2a6);
+  overflow: hidden;
+}
+
+.ph img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.tabs {
+  display: flex;
+  gap: 9px;
+  flex-wrap: wrap;
+  margin-top: 28px;
+}
+
+.tab {
+  padding: 10px 19px;
+  border: 1px solid var(--line);
+  background: transparent;
+  font: inherit;
+  font-size: 0.92rem;
+  border-radius: 999px;
+  cursor: pointer;
+  color: var(--ink);
+  transition: all 0.2s ease;
+}
+
+.tab:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.tab[aria-selected="true"] {
+  background: var(--accent);
+  color: #ffffff;
+  border-color: var(--accent);
+}
+
+/* ========================================================
+   RESPONSIVE & ACCESSIBILITY OVERRIDES
+   ======================================================== */
+@media (max-width: 640px) {
+  body {
+    font-size: 15px;
+  }
+  section {
+    padding: 72px 0;
+  }
+  .wrap {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
