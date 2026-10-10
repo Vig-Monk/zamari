@@ -1,7 +1,7 @@
 export const useStore = () => {
   const BRAND_NAME = 'Zamari Surfaces'
-  const STORE_URL = 'https://pangaflow.vercel.app/store/zamari-surfaces'
-  const ADMIN_URL = 'https://pangaflow.vercel.app/login'
+  const STORE_URL = 'https://kauntaos.vercel.app/store/zamari-surfaces'
+  const ADMIN_URL = 'https://kauntaos.vercel.app/login'
   const WA_NUMBER = '254723054899' // Kenya country code + phone without +
 
   const paths: Record<string, string> = {
